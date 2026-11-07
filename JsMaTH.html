@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f9">
+  <meta name="description" content="An introduction to the proposed J_s(n) function, infinitary logic, Berkeley cardinals, and large numbers in Googology.">
+  <title>Decoding J_s(n) | JsMaTH</title>
+
+  <!-- KaTeX 0.16.11: stylesheet and scripts are pinned to the requested version. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f7f9;
+      --paper: #ffffff;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --soft: #94a3b8;
+      --line: #e2e8f0;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-wash: #eff6ff;
+      --blue-line: #bfdbfe;
+      --shadow: 0 18px 55px rgba(15, 23, 42, 0.07);
+      --radius: 18px;
+      --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Baskerville, Georgia, serif;
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--blue-dark); text-decoration: underline; }
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.35);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      font-size: 1.14rem;
+    }
+    .brand:hover { color: var(--ink); text-decoration: none; }
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      display: block;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 5px 10px rgba(37, 99, 235, 0.16));
+    }
+    .brand-copy { display: grid; gap: 1px; }
+    .brand-name { line-height: 1.05; }
+    .brand-tagline {
+      color: #7c8ba1;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+    .header-note {
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+    }
+
+    .page-shell {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto 56px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 245px;
+      align-items: start;
+      gap: 24px;
+    }
+    .article-card {
+      min-width: 0;
+      background: var(--paper);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .article-inner { padding: clamp(26px, 5.2vw, 64px); }
+
+    .article-kicker {
+      font-family: var(--font-sans);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 17px;
+      color: var(--blue);
+      font-size: 0.73rem;
+      line-height: 1.3;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .article-kicker::before {
+      content: "";
+      width: 20px;
+      height: 2px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 830px;
+      margin-bottom: 20px;
+      font-family: var(--font-serif);
+      font-size: clamp(2.25rem, 5vw, 3.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+    .title-math { white-space: nowrap; color: var(--blue-dark); }
+    .metadata {
+      font-family: var(--font-sans);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 15px;
+      margin-bottom: 36px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    .metadata-item { display: inline-flex; align-items: center; gap: 7px; }
+    .metadata-dot { width: 4px; height: 4px; border-radius: 50%; background: #cbd5e1; }
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border: 1px solid var(--blue-line);
+      border-radius: 999px;
+      background: var(--blue-wash);
+      color: var(--blue-dark);
+      font-size: 0.76rem;
+      font-weight: 650;
+    }
+
+    .article-content { max-width: 790px; }
+    .article-content p { margin-bottom: 19px; color: #334155; }
+    .article-content .lead {
+      color: #334155;
+      font-size: 1.09rem;
+      line-height: 1.85;
+    }
+    .article-content h2 {
+      margin: 48px 0 17px;
+      padding-top: 5px;
+      font-family: var(--font-serif);
+      font-size: clamp(1.58rem, 3vw, 1.95rem);
+      line-height: 1.22;
+      letter-spacing: -0.025em;
+    }
+    .article-content h2::before {
+      content: "";
+      display: block;
+      width: 34px;
+      height: 3px;
+      margin-bottom: 14px;
+      border-radius: 3px;
+      background: var(--blue);
+    }
+    .article-content h3 {
+      margin: 27px 0 9px;
+      font-family: var(--font-serif);
+      font-size: 1.12rem;
+      letter-spacing: -0.01em;
+    }
+
+    .formula-panel {
+      position: relative;
+      margin: 32px 0 29px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--blue-line);
+      border-radius: 15px;
+      background: linear-gradient(135deg, #f3f8ff 0%, #f8fbff 100%);
+      box-shadow: inset 3px 0 0 var(--blue);
+    }
+    .formula-panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .formula-label {
+      font-family: var(--font-sans);
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .copy-button {
+      font-family: var(--font-sans);
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.88);
+      color: #334155;
+      font: inherit;
+      font-size: 0.76rem;
+      font-weight: 650;
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease, color 150ms ease, transform 150ms ease;
+    }
+    .copy-button:hover { border-color: #93c5fd; background: #fff; color: var(--blue-dark); }
+    .copy-button:active { transform: translateY(1px); }
+    .copy-button.is-copied { border-color: #86efac; color: #166534; background: #f0fdf4; }
+    .copy-icon { width: 14px; height: 14px; display: block; }
+    .formula-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 5px 14px;
+      scrollbar-color: #bfdbfe transparent;
+      scrollbar-width: thin;
+    }
+    .formula-scroll .katex-display { margin: 0; text-align: center; }
+    .formula-scroll .katex { font-size: clamp(0.93rem, 1.8vw, 1.13rem); }
+    .formula-hint {
+      font-family: var(--font-sans);
+      margin: 8px 0 0 !important;
+      color: #64748b !important;
+      font-size: 0.74rem;
+      text-align: right;
+    }
+
+    .component-list { margin: 21px 0 25px; padding: 0; list-style: none; }
+    .component-list li {
+      position: relative;
+      margin: 0;
+      padding: 15px 0 15px 27px;
+      border-bottom: 1px solid #edf1f5;
+      color: #334155;
+    }
+    .component-list li:last-child { border-bottom: 0; }
+    .component-list li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 25px;
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+      background: var(--blue);
+      transform: rotate(45deg);
+    }
+    .component-list strong { color: var(--ink); }
+    .component-list .katex { font-size: 0.98em; }
+
+    .takeaway {
+      margin: 28px 0 32px;
+      padding: 20px 22px;
+      border: 1px solid #dbeafe;
+      border-left: 4px solid var(--blue);
+      border-radius: 11px;
+      background: #f5f9ff;
+    }
+    .takeaway-title {
+      font-family: var(--font-sans);
+      display: block;
+      margin-bottom: 6px;
+      color: #1d4ed8;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .takeaway p { margin: 0; color: #334155; }
+
+    .formal-note {
+      margin: 24px 0 20px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.9rem;
+    }
+    .formal-note strong { color: var(--ink); }
+
+    .ip-list { margin: 18px 0 4px; padding-left: 21px; color: #334155; }
+    .ip-list li { padding-left: 5px; margin: 10px 0; }
+    .ip-list li::marker { color: var(--blue); }
+
+    .article-footer {
+      padding: 21px clamp(26px, 5.2vw, 64px);
+      border-top: 1px solid var(--line);
+      background: #fbfcfd;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.7;
+    }
+
+    .side-column { position: sticky; top: 22px; }
+    .side-card {
+      padding: 21px 19px;
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.84);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.035);
+    }
+    .side-label {
+      font-family: var(--font-sans);
+      margin: 0 0 13px;
+      color: #94a3b8;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .toc { display: grid; gap: 5px; }
+    .toc a {
+      font-family: var(--font-sans);
+      display: block;
+      padding: 7px 9px;
+      border-radius: 7px;
+      color: #64748b;
+      font-size: 0.83rem;
+      line-height: 1.45;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .toc a:hover { background: var(--blue-wash); color: var(--blue-dark); text-decoration: none; }
+    .side-divider { height: 1px; margin: 17px 0; background: var(--line); }
+    .side-caption { margin: 0; color: #64748b; font-size: 0.77rem; line-height: 1.65; }
+    .side-caption strong { color: #334155; }
+
+    .site-bottom {
+      font-family: var(--font-sans);
+      width: min(1120px, calc(100% - 40px));
+      margin: -30px auto 30px;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .page-shell { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
+      .side-column { position: static; order: -1; }
+      .side-card { padding: 14px 16px; }
+      .toc { display: flex; flex-wrap: wrap; gap: 4px; }
+      .toc a { padding: 6px 8px; }
+      .side-label, .side-divider, .side-caption { display: none; }
+    }
+    @media (max-width: 560px) {
+      body { font-size: 16px; }
+      .site-header, .page-shell, .site-bottom { width: min(100% - 24px, 760px); }
+      .site-header { padding: 18px 0 16px; }
+      .header-note { display: none; }
+      .brand-logo { width: 42px; height: 42px; }
+      .page-shell { margin-bottom: 38px; gap: 12px; }
+      .article-card { border-radius: 13px; }
+      .article-inner { padding: 27px 21px 32px; }
+      h1 { font-size: clamp(2rem, 10vw, 2.65rem); }
+      .metadata { margin-bottom: 27px; gap: 8px 11px; }
+      .article-content .lead { font-size: 1rem; }
+      .article-content h2 { margin-top: 39px; }
+      .formula-panel { margin-inline: -5px; padding: 17px 14px 15px; }
+      .formula-panel-top { align-items: flex-start; }
+      .formula-label { padding-top: 7px; }
+      .formula-scroll { text-align: left; }
+      .formula-scroll .katex-display { text-align: left; }
+      .formula-scroll .katex { font-size: 0.92rem; }
+      .article-footer { padding: 18px 21px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="JsMaTH home">
+      <svg class="brand-logo" viewBox="0 0 48 48" role="img" aria-label="JsMaTH mathematical monogram">
+        <defs>
+          <linearGradient id="jsmath-logo-gradient" x1="5" y1="4" x2="43" y2="45" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#3478f6"/>
+            <stop offset="1" stop-color="#1745b8"/>
+          </linearGradient>
+        </defs>
+        <rect x="1" y="1" width="46" height="46" rx="14" fill="url(#jsmath-logo-gradient)"/>
+        <circle cx="24" cy="24" r="17.2" fill="none" stroke="#dbeafe" stroke-opacity=".34" stroke-width="1.15"/>
+        <path d="M11.5 15.5c4.1-5.4 11.9-7.5 18.4-4.7 4.1 1.8 7 5 8.1 9" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="38" cy="20" r="2.15" fill="#bfdbfe" stroke="#fff" stroke-width=".8"/>
+        <text x="11.1" y="34.6" fill="#fff" font-family="Georgia, 'Times New Roman', serif" font-size="25" font-weight="700" letter-spacing="-2">J</text>
+        <text x="25.8" y="36.2" fill="#dbeafe" font-family="Georgia, 'Times New Roman', serif" font-size="13" font-style="italic">s</text>
+      </svg>
+      <span class="brand-copy">
+        <span class="brand-name">JsMaTH</span>
+        <span class="brand-tagline">Mathematical frontiers</span>
+      </span>
+    </a>
+    <span class="header-note">Notes on large numbers, logic &amp; foundations</span>
+  </header>
+
+  <main class="page-shell" id="top">
+    <article class="article-card" aria-labelledby="article-title">
+      <div class="article-inner">
+        <header class="article-heading">
+          <p class="article-kicker">Research essay · Mathematical logic</p>
+          <h1 id="article-title">Decoding <span class="title-math">J<sub>s</sub>(n)</span>: When Transfinite Mathematics Reaches the Limits of Human Thought</h1>
+          <div class="metadata" aria-label="Article information">
+            <span class="metadata-item">
+              <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+              November 7, 2026
+            </span>
+            <span class="metadata-dot" aria-hidden="true"></span>
+            <span class="category-tag">Googology &amp; Set Theory</span>
+          </div>
+        </header>
+
+        <div class="article-content">
+          <section id="introduction" aria-labelledby="intro-title">
+            <h2 id="intro-title">Introduction</h2>
+            <p class="lead">Googology is the study of extraordinarily large numbers. Familiar examples such as a <strong>Googol</strong>, <span>\(10^{100}\)</span>, and even <strong>Graham's number</strong> are enormous by everyday standards. Yet they can be dwarfed by numbers described through powerful mathematical frameworks involving formal logic, Set Theory, and Large Cardinals.</p>
+            <p>Instead of relying only on repeated exponentiation or elaborate numerical notation, these approaches use the expressive power of mathematical languages and the statements that can be proved within an axiom system. The proposed function <span>\(J_s(n)\)</span> explores this idea: how large a natural number can be characterized when the description is restricted by a finite symbol budget?</p>
+          </section>
+
+          <section id="main-equation" aria-labelledby="equation-title">
+            <h2 id="equation-title">The Main Equation</h2>
+            <p>The expression below is the proposed definition at the center of this article.</p>
+
+            <div class="formula-panel" aria-label="Main mathematical definition">
+              <div class="formula-panel-top">
+                <span class="formula-label">Proposed formal definition</span>
+                <button class="copy-button" id="copy-latex" type="button" aria-label="Copy the main formula as LaTeX">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3"/></svg>
+                  <span id="copy-label">Copy LaTeX</span>
+                </button>
+              </div>
+              <div class="formula-scroll" tabindex="0" role="region" aria-label="Scrollable mathematical formula">
+                $$
+                J_s(n)=\max \left\{x \in \mathbb{N} \mid \exists \varphi \in \mathcal{L}_{\omega_1, \text{Berkeley}}^{\infty}\left(\operatorname{Len}(\varphi) \leq n \wedge \mathrm{ZFC}^{-}+\mathrm{BC} \vdash \psi(x, \varphi)\right)\right\}
+                $$
+              </div>
+              <p class="formula-hint">On smaller screens, scroll horizontally to view the full expression.</p>
+            </div>
+          </section>
+
+          <section id="breaking-down" aria-labelledby="breakdown-title">
+            <h2 id="breakdown-title">1. Breaking Down the Formula</h2>
+            <p>Each part of the expression has a specific role in describing the numbers that qualify.</p>
+            <ul class="component-list">
+              <li><strong>\(J_s(n)\):</strong> The largest natural number \(x\) uniquely definable by a formula \(\varphi\) containing at most \(n\) symbols, relative to the stated formal framework.</li>
+              <li><strong>\(\mathcal{L}_{\omega_1, \text{Berkeley}}^{\infty}\):</strong> An infinitary formal language augmented with symbols intended to refer to a Berkeley Cardinal.</li>
+              <li><strong>\(\operatorname{Len}(\varphi) \leq n\):</strong> The symbol-length constraint. It limits the size of each description so that the definition cannot use an unlimited expression.</li>
+              <li><strong>\(\mathrm{ZFC}^{-} + \mathrm{BC} \vdash \psi(x, \varphi)\):</strong> The proposed axiomatic foundation. \(\mathrm{ZFC}^{-}\) denotes a version of Zermelo–Fraenkel set theory without the Axiom of Choice, while \(\mathrm{BC}\) denotes the Berkeley Cardinal axiom. The proof predicate \(\psi\) is intended to express that \(\varphi\) uniquely defines \(x\) in this theory.</li>
+            </ul>
+
+            <aside class="takeaway" aria-label="Core takeaway">
+              <span class="takeaway-title">Core takeaway</span>
+              <p>A stronger formal language can describe vastly larger numbers within the same symbol budget. The expressive strength of the language and the axioms matters just as much as the length of the description.</p>
+            </aside>
+
+            <div class="formal-note">
+              <strong>A note on mathematical precision.</strong> This equation is a proposed schematic definition. To make \(J_s(n)\) a fully well-defined function, \(\psi(x,\varphi)\) must be specified precisely as a unique-definability condition, and the set of eligible values must be nonempty and bounded so that its maximum exists. The infinitary language and the formal meaning of \(\mathrm{BC}\) also need exact definitions.
+            </div>
+          </section>
+
+          <section id="intellectual-property" aria-labelledby="ip-title">
+            <h2 id="ip-title">2. Copyright &amp; Intellectual Property</h2>
+            <p>JsMaTH distinguishes mathematical ideas and notation from the original presentation used to explain them.</p>
+            <ul class="ip-list">
+              <li><strong>Mathematical formulas, symbols, and numbers</strong> belong to the public domain and are not claimed as exclusive creative property.</li>
+              <li><strong>The written commentary, page layout, and source code</strong> are copyrighted by JsMaTH.</li>
+              <li><strong>Academic attribution and notation preservation</strong> are encouraged. When discussing or reusing the presentation, credit JsMaTH and preserve the mathematical notation accurately.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <footer class="article-footer">
+        © 2026 JsMaTH. All written analysis and source code are copyrighted by the author. Mathematical formulas belong to the public domain.
+      </footer>
+    </article>
+
+    <aside class="side-column" aria-label="Article navigation and details">
+      <div class="side-card">
+        <p class="side-label">On this page</p>
+        <nav class="toc" aria-label="Table of contents">
+          <a href="#introduction">Introduction</a>
+          <a href="#main-equation">The Main Equation</a>
+          <a href="#breaking-down">1. Breaking Down the Formula</a>
+          <a href="#intellectual-property">2. Copyright &amp; Intellectual Property</a>
+        </nav>
+        <div class="side-divider"></div>
+        <p class="side-label">About this article</p>
+        <p class="side-caption"><strong>JsMaTH</strong> explores large-number notation, mathematical logic, and the foundations behind extreme numerical constructions.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="site-bottom">Made for curious minds · JsMaTH</div>
+
+  <script>
+    // Raw LaTeX copied by the button. Kept separate from the rendered KaTeX markup.
+    const mainFormulaLatex = String.raw`J_s(n)=\max \left\{x \in \mathbb{N} \mid \exists \varphi \in \mathcal{L}_{\omega_1, \text{Berkeley}}^{\infty}\left(\operatorname{Len}(\varphi) \leq n \wedge \mathrm{ZFC}^{-}+\mathrm{BC} \vdash \psi(x, \varphi)\right)\right\}`;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Render both display math ($$...$$) and inline math (\(...\)).
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '\\(', right: '\\)', display: false }
+          ],
+          throwOnError: false,
+          strict: 'ignore'
+        });
+      }
+
+      const copyButton = document.getElementById('copy-latex');
+      const copyLabel = document.getElementById('copy-label');
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        // Fallback for local file previews and browsers without Clipboard API access.
+        const temporary = document.createElement('textarea');
+        temporary.value = text;
+        temporary.setAttribute('readonly', '');
+        temporary.style.position = 'fixed';
+        temporary.style.opacity = '0';
+        document.body.appendChild(temporary);
+        temporary.select();
+        const succeeded = document.execCommand('copy');
+        temporary.remove();
+        if (!succeeded) throw new Error('Copy command was not successful.');
+      }
+
+      copyButton.addEventListener('click', async () => {
+        const originalLabel = 'Copy LaTeX';
+        try {
+          await copyText(mainFormulaLatex);
+          copyLabel.textContent = 'Copied!';
+          copyButton.classList.add('is-copied');
+          copyButton.setAttribute('aria-label', 'LaTeX formula copied');
+        } catch (error) {
+          copyLabel.textContent = 'Copy unavailable';
+          copyButton.setAttribute('aria-label', 'Could not copy the formula');
+        }
+        window.setTimeout(() => {
+          copyLabel.textContent = originalLabel;
+          copyButton.classList.remove('is-copied');
+          copyButton.setAttribute('aria-label', 'Copy the main formula as LaTeX');
+        }, 1800);
+      });
+    });
+  </script>
+</body>
+</html>
